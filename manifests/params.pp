@@ -12,6 +12,7 @@ class xinetd::params {
       $service_hasstatus  = false
       $service_name       = 'xinetd'
       $service_restart    = "/usr/sbin/service ${service_name} reload"
+      $service_status     = "/usr/sbin/service ${service_name} status"
     }
     'FreeBSD': {
       $confdir            = '/usr/local/etc/xinetd.d'
@@ -30,6 +31,7 @@ class xinetd::params {
       $service_hasstatus  = false
       $service_name       = 'xinetd'
       $service_restart    = "/sbin/service ${service_name} reload"
+      $service_status     = "/usr/sbin/service ${service_name} status"
     }
     'RedHat':  {
       $confdir            = '/etc/xinetd.d'
@@ -39,6 +41,10 @@ class xinetd::params {
       $service_hasstatus  = true
       $service_name       = 'xinetd'
       $service_restart    = "/sbin/service ${service_name} reload"
+      $service_status     = $::operatingsystemmajrelease ? {
+        '7'     => "/usr/bin/systemctl status ${service_name}",
+        default => "/usr/sbin/service ${service_name} status"
+      }
     }
     'Gentoo': {
       $confdir            = '/etc/xinetd.d'
